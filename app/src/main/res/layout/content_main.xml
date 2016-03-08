@@ -39,14 +39,6 @@
 
 
     <Button
-        android:id="@+id/showlocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="showLocation"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
         android:id="@+id/showlocationupdates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

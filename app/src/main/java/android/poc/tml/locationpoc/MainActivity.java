@@ -2,12 +2,15 @@ package android.poc.tml.locationpoc;
 //APP IMPORTS
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -53,11 +56,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static int FASTEST_INTERVAL = 5000;
     private static int displacement = 10;
 
-
     //VARIABLES FOR APIS
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
-
 
    //APP VARIABLES
     private String locationAddress;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setSupportActionBar(toolbar);
 
         lblLocation = (TextView) findViewById(R.id.lblLocation);
-        btnShowLocation = (Button) findViewById(R.id.showlocation);
+       // btnShowLocation = (Button) findViewById(R.id.showlocation);
         btnStartLocationUpdates = (Button) findViewById(R.id.showlocationupdates);
 
 //CHECK IF APP HAS PERMISSIONS - ANDROID 6
@@ -92,14 +93,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             createLocationRequest();
         }
 
-        btnShowLocation.setOnClickListener(new View.OnClickListener() {
+/*        btnShowLocation.setOnClickListener(new View.OnClickListener() {
 
                                                public void onClick(View v) {
                                                    displayLocation();
                                                }
 
                                            }
-        );
+        );*/
 
         btnStartLocationUpdates.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,9 +120,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"pranav.j@tatamotors.com"});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Location Update");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Location Update: Lat: " + mLastLocation.getLongitude() + "Long : " +mLastLocation.getLatitude() +  locationAddress);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Location Update: Lat: " + mLastLocation.getLongitude() + "Long : " +mLastLocation.getLatitude()+  locationAddress);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Sharing Location", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 startActivity(emailIntent);
             }
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onResume();
 
        CheckEnableGPS();
+       CheckEnableInternet();
+
         //turnGPSOn();
         checkPlayServices();
         if (mGoogleApiClient.isConnected() && mRequestLocationUpdates) {
@@ -214,8 +217,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         return myAddress;
     }
-
-
 
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -294,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         try {
                        LocationServices.FusedLocationApi.requestLocationUpdates(
                                mGoogleApiClient, mLocationRequest, this);
-
         } catch (SecurityException e)
         {
             e.printStackTrace();
@@ -303,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     protected void stopLocationUpdates()
     {
-
         try {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
@@ -311,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         {
            e.printStackTrace();
         }
-
     }
 
     @Override
@@ -321,7 +319,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if(mRequestLocationUpdates){
             startLocationUpdates();
         }
-
     }
 
     @Override
@@ -351,21 +348,42 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("GPS not enabled. Please enable GPS");
 
-            alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
                     Intent viewIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(viewIntent);
                 }
             });
-
             alertDialogBuilder.show();
-
         }
 
     }
 
+    private boolean CheckEnableInternet()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
+        if(!(netInfo != null && netInfo.isConnectedOrConnecting()))
+        {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Internet Not Enabled");
+
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent viewIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(viewIntent);
+                }
+            });
+            alertDialogBuilder.show();
+        }
+
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+
+    }
 
     /*
     //<editor-fold desc="Description">
