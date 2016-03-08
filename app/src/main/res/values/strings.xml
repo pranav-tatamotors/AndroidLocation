@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">LocationPOC</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_you_are_at">You are at</string>
+    <string name="btn_get_location">Get my location</string>
+    <string name="btn_start_location_updates">Start location updates</string>
+    <string name="invalid_lat_long_used">Invalid Lat Long Used</string>
+    <string name="string.service_not_available">Service Not Available</string>
+    <string name="no_address_found">Address not Found</string>
+    <string name="address_found">Address not Found</string>
+    <string name="btn_stop_location_updates">Stop Location Updates</string>
+
+</resources>
