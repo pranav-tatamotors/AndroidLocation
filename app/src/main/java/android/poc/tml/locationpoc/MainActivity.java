@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationRequest mLocationRequest;
     private TextView lblLocation;
     private Button btnShowLocation, btnStartLocationUpdates;
+    private static final String [] AddressComponents = {"","",""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"pranav.j@tatamotors.com"});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Location Update");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Location Update: Lat: " + mLastLocation.getLongitude() + "Long : " +mLastLocation.getLatitude()+  locationAddress);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Location Update: Lat: " + mLastLocation.getLongitude() + "Long : " +mLastLocation.getLatitude()+"\n"+  locationAddress);
 
                 Snackbar.make(view, "Sharing Location", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 StringBuilder strAddress = new StringBuilder();
 
                 for(int i=0; i<fetchedAddress.getMaxAddressLineIndex(); i++) {
-                    strAddress.append(fetchedAddress.getAddressLine(i)).append("\n");
+                    strAddress.append(fetchedAddress.getAddressLine(i)).append("|");
                 }
 
                myAddress = "I am at: " +strAddress.toString();
