@@ -243,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void toggleLocationUpdate()
     {
+
+        if(!CheckEnableGPS())
+        CheckEnableInternet();
+
         if(!mRequestLocationUpdates)
         {
             btnStartLocationUpdates.setText(getString(R.string.btn_stop_location_updates));
@@ -340,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
         if(!provider.equals("")){
             //GPS Enabled
-            Toast.makeText(this, "GPS Enabled: " + provider,
+            Toast.makeText(this, "Enabled: " + provider,
                     Toast.LENGTH_LONG).show();
             return true;
         }else{
