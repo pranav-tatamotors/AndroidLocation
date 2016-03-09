@@ -334,13 +334,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     //CHECK IF GPS IS ENABLED OR NOT
-    private void CheckEnableGPS(){
+    private boolean CheckEnableGPS(){
         String provider = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
         if(!provider.equals("")){
             //GPS Enabled
             Toast.makeText(this, "GPS Enabled: " + provider,
                     Toast.LENGTH_LONG).show();
+            return true;
         }else{
 
             // GPS NOT ENABLED. Show Dialogue and take user to settings
@@ -356,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
             });
             alertDialogBuilder.show();
+            return false;
         }
 
     }
@@ -368,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if(!(netInfo != null && netInfo.isConnectedOrConnecting()))
         {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+           /* AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Internet Not Enabled");
 
             alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -378,7 +380,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     startActivity(viewIntent);
                 }
             });
-            alertDialogBuilder.show();
+            alertDialogBuilder.show();*/
+
+            Toast.makeText(this, "Please enable Internet",
+                    Toast.LENGTH_SHORT).show();
         }
 
         return netInfo != null && netInfo.isConnectedOrConnecting();
