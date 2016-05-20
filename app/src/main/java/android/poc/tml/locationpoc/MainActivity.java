@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             double longitude = mLastLocation.getLongitude();
 
           locationAddress = getMyLocationAddress(latitude,longitude);
-            lblLocation.setText("Loc Coordinates: "+ latitude + "," + longitude + "Location in Words: "+ locationAddress);
+            lblLocation.setText(locationAddress);
            // final MainActivity globalVariable = (MainActivity) getApplicationContext();
            Location = new LatLng(latitude,longitude);
 
