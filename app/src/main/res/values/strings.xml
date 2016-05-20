@@ -9,5 +9,7 @@
     <string name="no_address_found">Address not Found</string>
     <string name="address_found">Address not Found</string>
     <string name="btn_stop_location_updates">Stop Location Updates</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="LocationValue">locationvalue</string>
 
 </resources>

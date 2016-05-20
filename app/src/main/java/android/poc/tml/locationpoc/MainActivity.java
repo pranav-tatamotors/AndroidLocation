@@ -35,6 +35,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
 
 //Reverse GEOCODING
 import java.util.List;
@@ -55,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static int UPDATE_INTERVAL = 10000;
     private static int FASTEST_INTERVAL = 5000;
     private static int displacement = 10;
+
+    boolean enable_sending=false;
+
+    public static LatLng Location;
 
     //VARIABLES FOR APIS
     private Location mLastLocation;
@@ -110,6 +116,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+
+        Button MapUI = (Button) findViewById(R.id.mapui);
+
+        MapUI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent showmap = new Intent(getApplicationContext(), MapsActivity.class);
+                showmap.putExtra("Latitude",mLastLocation.getLatitude());
+                showmap.putExtra("Longitude",mLastLocation.getLongitude());
+                if(enable_sending==true)
+                    startActivity(showmap);
+                else
+                    Toast.makeText(MainActivity.this, "Address not Available", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,11 +146,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"pranav.j@tatamotors.com"});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Location Update");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Location Update: Lat: " + mLastLocation.getLongitude() + "Long : " +mLastLocation.getLatitude()+"\n"+  locationAddress);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Click to find on Google Maps  http://maps.google.com/?q=" + mLastLocation.getLatitude() +"," +mLastLocation.getLongitude()+" \n     Location Address:"+  locationAddress);
 
                 Snackbar.make(view, "Sharing Location", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                if(enable_sending==true)
                 startActivity(emailIntent);
+                else
+                    Toast.makeText(MainActivity.this, "Address not Available", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -232,9 +260,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             double latitude =mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
 
-
           locationAddress = getMyLocationAddress(latitude,longitude);
             lblLocation.setText("Loc Coordinates: "+ latitude + "," + longitude + "Location in Words: "+ locationAddress);
+           // final MainActivity globalVariable = (MainActivity) getApplicationContext();
+           Location = new LatLng(latitude,longitude);
+
+
+            //Allow Sharing of the Location
+            enable_sending = true;
+
+            Button e = (Button)findViewById(R.id.mapui);
+            e.setEnabled(true);
+
 
         } else {
             lblLocation.setText("Could not get Location. Enable Location");

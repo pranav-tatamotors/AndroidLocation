@@ -53,5 +53,14 @@
         android:text="Click button to start get location"
         android:id="@+id/textView2" />
 
+    <Button
+        android:id="@+id/mapui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ShowonMap"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/ripple"
+        android:enabled="true" />
+
 
 </LinearLayout>
